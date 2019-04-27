@@ -29,9 +29,11 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
         
         let cell:foodTableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell") as! foodTableViewCell
         
+        //nameLabel , priceLabel , imageURL อ้างอิงจาก foodTableViewCell
         cell.nameLabel.text = self.arrdata[indexPath.row].NameFood
         cell.priceLabel.text = self.arrdata[indexPath.row].Price
         
+        //แสดงภาพจาก url
         if let imageURL = URL(string: arrdata[indexPath.row].ImagePath) {
             
             DispatchQueue.global().async {
@@ -58,27 +60,49 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
     }
     
     
-   
     
+    
+    
+    
+   
+    // show Detail
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detail:DetailViewController = self.storyboard?.instantiateViewController(withIdentifier: "detail") as! DetailViewController
+        let fooddetail:DetailViewController = self.storyboard?.instantiateViewController(withIdentifier: "detail"/* ต้องตรงกับ identity storyboard id คือ detail แล้วต้อง tick ที่ use storyboard id */) as! DetailViewController
         
-        detail.detail = "Detail is \(arrdata[indexPath.row].Detail)"
+        // detail เป็น string ที่สร้างใน DetailViewContriller.swift เพื่อที่จะเรียกใช้ label ที่ชื่อว่า DetailLabel
+        fooddetail.detail = "Detail is \(arrdata[indexPath.row].Detail)"
         
-        self.navigationController?.pushViewController(detail, animated: true)
+        self.navigationController?.pushViewController(fooddetail, animated: true)
         
     }
     
     
-    var arrdata = [foodData]()
+    
+    
+    
+    
+    
+    
+    var arrdata = [foodData]() //สร้างตัวแปร array เอาข้อมูลจาก struct foodData
 
     @IBOutlet weak var tableView: UITableView!
+    
+    
+    
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         getdata()
         // Do any additional setup after loading the view.
     }
+    
+    
+    
+    
+    
     
     func getdata() {
         let url = URL(string: "https://www.androidthai.in.th/ssm/getAllDatafoodTABLE.php")
@@ -88,13 +112,13 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
                 
                 if error == nil{
                     
-                    self.arrdata = try JSONDecoder().decode([foodData].self, from: data!)
+                    self.arrdata = try JSONDecoder().decode([foodData].self, from: data!) // เอาข้อมูลใส่ใน struct foodData
                     
                     for mainarr in self.arrdata{
                         print(mainarr.NameFood,":",mainarr.Price,":",mainarr.ImagePath,":",mainarr.Detail)
                         
                         DispatchQueue.main.async {
-                            self.tableView.reloadData()
+                            self.tableView.reloadData() // reloadData of tableView
                         }
                         
                         
@@ -109,6 +133,9 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
         }.resume()
     }
 
+    
+    
+    
 
 }
 
