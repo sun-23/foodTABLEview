@@ -127,12 +127,14 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
     
     private func setUp() {
 
-        foodSearch = arrdata // เนื่องจาก searchBar ต้องใช้ตัวแปรอีกตัวอ้างอิงค่าจาก struct foodData ถึงจะทำงานได้
+        foodSearch = arrdata // ตัวแปรอีกตัวอ้างอิงค่าจาก arrdata
         
     }
     
   
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        
         foodSearch = arrdata.filter({ data -> Bool in
             switch searchBar.selectedScopeButtonIndex {
             case 0:
