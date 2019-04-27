@@ -10,13 +10,15 @@ import UIKit
 
 class DetailViewController: UIViewController {
     
+    @IBOutlet weak var DetailImage: UIImageView!
     @IBOutlet weak var DetailLabel: UILabel!
     
     var detail = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        DetailLabel?.text = detail 
+        
+        DetailLabel?.text = detail
 
         // Do any additional setup after loading the view.
     }

@@ -72,6 +72,28 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
         // detail เป็น string ที่สร้างใน DetailViewContriller.swift เพื่อที่จะเรียกใช้ label ที่ชื่อว่า DetailLabel
         fooddetail.detail = "Detail is \(arrdata[indexPath.row].Detail)"
         
+           if let imageURL = URL(string: arrdata[indexPath.row].ImagePath) {
+            
+            DispatchQueue.global().async {
+                
+                let data = try? Data(contentsOf: imageURL)
+                if let data = data {
+                    
+                    let image = UIImage(data: data)
+                    DispatchQueue.main.async {
+                        
+                        // DetailImage is Declared In DetailViewController.swift
+                        fooddetail.DetailImage.image = image 
+                        
+                    }
+                }
+            }
+            
+            
+        }else{
+            print("ERROR LOAD IMAGE")
+        }
+        
         self.navigationController?.pushViewController(fooddetail, animated: true)
         
     }
