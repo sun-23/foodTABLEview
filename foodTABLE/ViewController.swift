@@ -13,7 +13,7 @@ struct foodData:Decodable {
     let NameFood:String
     let Price:String
     let ImagePath:String
-    
+    let Detail:String
     
 }
 
@@ -58,6 +58,18 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
     }
     
     
+   
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detail:DetailViewController = self.storyboard?.instantiateViewController(withIdentifier: "detail") as! DetailViewController
+        
+        detail.detail = "Detail is \(arrdata[indexPath.row].Detail)"
+        
+        self.navigationController?.pushViewController(detail, animated: true)
+        
+    }
+    
+    
     var arrdata = [foodData]()
 
     @IBOutlet weak var tableView: UITableView!
@@ -79,7 +91,7 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
                     self.arrdata = try JSONDecoder().decode([foodData].self, from: data!)
                     
                     for mainarr in self.arrdata{
-                        print(mainarr.NameFood,":",mainarr.Price,":",mainarr.ImagePath)
+                        print(mainarr.NameFood,":",mainarr.Price,":",mainarr.ImagePath,":",mainarr.Detail)
                         
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
