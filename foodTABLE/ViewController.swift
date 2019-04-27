@@ -17,11 +17,11 @@ struct foodData:Decodable {
     
 }
 
-class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
+class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return self.arrdata.count
+        return self.foodSearch.count
         
     }
     
@@ -30,11 +30,11 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
         let cell:foodTableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell") as! foodTableViewCell
         
         //nameLabel , priceLabel , imageURL อ้างอิงจาก foodTableViewCell
-        cell.nameLabel.text = self.arrdata[indexPath.row].NameFood
-        cell.priceLabel.text = self.arrdata[indexPath.row].Price
+        cell.nameLabel.text = self.foodSearch[indexPath.row].NameFood
+        cell.priceLabel.text = self.foodSearch[indexPath.row].Price
         
         /*แ สดงภาพจาก url แต่ถ้าภาพไม่ขึ้นต้องไป อณุญาติ domain ดูวิธีทำจาก https://www.androidthai.in.th/article-ios-swift/249-security-setting-ios-connected-http.html */
-        if let imageURL = URL(string: arrdata[indexPath.row].ImagePath) {
+        if let imageURL = URL(string: foodSearch[indexPath.row].ImagePath) {
             
             DispatchQueue.global().async {
                 
@@ -70,9 +70,9 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
         let fooddetail:DetailViewController = self.storyboard?.instantiateViewController(withIdentifier: "detail"/* ต้องตรงกับ identity storyboard id คือ detail แล้วต้อง tick ที่ use storyboard id */) as! DetailViewController
         
         // detail เป็น string ที่สร้างใน DetailViewContriller.swift เพื่อที่จะเรียกใช้ label ที่ชื่อว่า DetailLabel
-        fooddetail.detail = "Detail is \(arrdata[indexPath.row].Detail)"
+        fooddetail.detail = "Detail is \(foodSearch[indexPath.row].Detail)"
         
-           if let imageURL = URL(string: arrdata[indexPath.row].ImagePath) {
+           if let imageURL = URL(string: foodSearch[indexPath.row].ImagePath) {
             
             DispatchQueue.global().async {
                 
@@ -106,10 +106,9 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
     
     
     var arrdata = [foodData]() //สร้างตัวแปร array เอาข้อมูลจาก struct foodData
-
+    var foodSearch = [foodData]()
     @IBOutlet weak var tableView: UITableView!
-    
-    
+    @IBOutlet weak var searchBar: UISearchBar!
     
     
     
@@ -117,8 +116,47 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
     override func viewDidLoad() {
         super.viewDidLoad()
         getdata()
-        // Do any additional setup after loading the view.
+        setUp()
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    private func setUp() {
+
+        foodSearch = arrdata // เนื่องจาก searchBar ต้องใช้ตัวแปรอีกตัวอ้างอิงค่าจาก struct foodData ถึงจะทำงานได้
+        
+    }
+    
+  
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        foodSearch = arrdata.filter({ data -> Bool in
+            switch searchBar.selectedScopeButtonIndex {
+            case 0:
+                if searchText.isEmpty { return true }
+                return data.NameFood.lowercased().contains(searchText.lowercased())
+            default:
+                return false
+            }
+        })
+        tableView.reloadData()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        switch selectedScope {
+        case 0:
+             foodSearch = arrdata
+        default:
+            break
+        }
+        tableView.reloadData()
+    }
+    
     
     
     
