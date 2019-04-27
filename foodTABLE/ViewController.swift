@@ -33,7 +33,7 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
         cell.nameLabel.text = self.arrdata[indexPath.row].NameFood
         cell.priceLabel.text = self.arrdata[indexPath.row].Price
         
-        //แสดงภาพจาก url
+        /*แ สดงภาพจาก url แต่ถ้าภาพไม่ขึ้นต้องไป อณุญาติ domain ดูวิธีทำจาก https://www.androidthai.in.th/article-ios-swift/249-security-setting-ios-connected-http.html */
         if let imageURL = URL(string: arrdata[indexPath.row].ImagePath) {
             
             DispatchQueue.global().async {
