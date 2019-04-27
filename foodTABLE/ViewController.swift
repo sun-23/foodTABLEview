@@ -117,14 +117,12 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
         super.viewDidLoad()
         getdata()
         setUp()
+        
     }
     
     
     
-    
-    
-    
-    
+
     
     
     private func setUp() {
@@ -155,6 +153,12 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
             break
         }
         tableView.reloadData()
+    }
+    
+    
+    // hide keyboard
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
     }
     
     
